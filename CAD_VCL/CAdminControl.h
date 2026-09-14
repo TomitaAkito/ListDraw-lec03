@@ -2,6 +2,7 @@
 #include "resource.h"
 #include "CDraw.h"
 #include "CVertex.h"
+#include <math.h>
 
 #define MAX_LOADSTRING 100
 
@@ -31,5 +32,16 @@ public:
 
 	/* 課題3 DeleteVertex関数の作成*/
 	void DeleteVertex();
+
+	/* 課題ex-1 近い頂点を削除 */
+	void DeleteVertex_close(int x,int y);
+
+	/// <summary>
+	/// 2頂点間の距離を算出
+	/// </summary>
+	/// <param name="v1">頂点1</param>
+	/// <param name="v2">頂点2</param>
+	/// <returns>[double]頂点間の距離</returns>
+	double calcDistance(CVertex* v1, CVertex* v2);
 };
 

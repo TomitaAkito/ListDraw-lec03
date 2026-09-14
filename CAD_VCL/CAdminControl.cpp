@@ -197,7 +197,13 @@ LRESULT CAdminControl::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 		y = HIWORD(lParam);
 
 		/* 課題3 右クリックで最新の点を削除 */
-		DeleteVertex();
+		//DeleteVertex();
+
+		/* ex-1 任意の頂点削除 */
+		// ウィンドウの座標を取得
+		x = LOWORD(lParam);
+		y = HIWORD(lParam);
+		DeleteVertex_close(x, y);
 
 		InvalidateRect(hWnd, NULL, TRUE);   //領域無効化
 		UpdateWindow(hWnd);                 //再描画命令
@@ -262,10 +268,63 @@ void CAdminControl::DeleteVertex() {
 		vertex_pretail->SetNext(NULL);
 		delete vertex_tail;
 	}
-
-
-
 }
+
+void CAdminControl::DeleteVertex_close(int x, int y) {
+	// 例外処理
+	if (vertex_head == NULL)
+		return;
+
+	// 定数定義
+	double THRESHOLD = 30;
+	CVertex* mouseV = new CVertex(x, y,NULL);
+	CVertex* DeleteV = NULL;
+
+	// 近接する頂点取得
+	for (CVertex* currentV = vertex_head; currentV != NULL; currentV = currentV->GetNext()) {
+		if (calcDistance(currentV, mouseV) < THRESHOLD) {
+			DeleteV = currentV;
+			break;
+		}
+	}
+
+	// マウス座標の頂点削除
+	delete mouseV;
+
+	// 該当する頂点がなければ終了
+	if (!DeleteV) return;
+
+	// ------頂点削除------
+	// 削除対象がリストの先頭の場合
+	if (DeleteV == vertex_head) {
+		vertex_head = DeleteV->GetNext();
+	}
+	// 削除対象が先頭以外の場合
+	else {
+		CVertex* pre = NULL;
+
+		// 削除対象の前の頂点を取得
+		for (CVertex* currentV = vertex_head; currentV != NULL; currentV = currentV->GetNext()) {
+			if (currentV->GetNext() == DeleteV) {
+				pre = currentV;
+				break;
+			}
+		}
+
+		// 直前のノードの次を、削除対象の次につなぎ直す（リストから外す）
+		if (pre != NULL) 
+			pre->SetNext(DeleteV->GetNext());
+	}
+
+	// メモリ解放
+	delete DeleteV;
+}
+
+double CAdminControl::calcDistance(CVertex* v1, CVertex* v2) {
+	return sqrt(pow((v2->GetX()-v1->GetX()),2)+ pow((v2->GetY() - v1->GetY()), 2));
+}
+
+
 
 // バージョン情報ボックスのメッセージ ハンドラーです。
 INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
