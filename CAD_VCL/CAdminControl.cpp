@@ -237,7 +237,7 @@ void CAdminControl::AddVertex(float x, float y) {
 	} else {
 		CVertex* currentV;
 
-		for(currentV = vertex_head;currentV->GetNext() != NULL;currentV = currentV->GetNext()) {}
+		for (currentV = vertex_head; currentV->GetNext() != NULL; currentV = currentV->GetNext());
 
 		currentV->SetNext(newVertex);
 	}
