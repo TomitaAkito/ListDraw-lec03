@@ -43,5 +43,12 @@ public:
 	/// <param name="v2">頂点2</param>
 	/// <returns>[double]頂点間の距離</returns>
 	double calcDistance(CVertex* v1, CVertex* v2);
+
+	/// <summary>
+	/// 引数で渡された頂点の1つ前の頂点を取得
+	/// </summary>
+	/// <param name="searchV">頂点</param>
+	/// <returns>[CVertex*]頂点の1つ前の頂点</returns>
+	CVertex* GetPreVertex(CVertex* searchV);
 };
 

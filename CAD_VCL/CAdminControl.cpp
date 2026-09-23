@@ -272,8 +272,7 @@ void CAdminControl::DeleteVertex() {
 
 void CAdminControl::DeleteVertex_close(int x, int y) {
 	// 例外処理
-	if (vertex_head == NULL)
-		return;
+	if (vertex_head == NULL) return;
 
 	// 定数定義
 	double THRESHOLD = 30;
@@ -302,18 +301,8 @@ void CAdminControl::DeleteVertex_close(int x, int y) {
 	// 削除対象が先頭以外の場合
 	else {
 		CVertex* pre = NULL;
-
-		// 削除対象の前の頂点を取得
-		for (CVertex* currentV = vertex_head; currentV != NULL; currentV = currentV->GetNext()) {
-			if (currentV->GetNext() == DeleteV) {
-				pre = currentV;
-				break;
-			}
-		}
-
-		// 直前のノードの次を、削除対象の次につなぎ直す（リストから外す）
-		if (pre != NULL) 
-			pre->SetNext(DeleteV->GetNext());
+		pre = GetPreVertex(DeleteV);
+		if (pre != NULL) pre->SetNext(DeleteV->GetNext());
 	}
 
 	// メモリ解放
@@ -322,6 +311,13 @@ void CAdminControl::DeleteVertex_close(int x, int y) {
 
 double CAdminControl::calcDistance(CVertex* v1, CVertex* v2) {
 	return sqrt(pow((v2->GetX()-v1->GetX()),2)+ pow((v2->GetY() - v1->GetY()), 2));
+}
+
+CVertex* CAdminControl::GetPreVertex(CVertex* searchV) {
+	for (CVertex* currentV = vertex_head; currentV != NULL; currentV = currentV->GetNext()) {
+		if (currentV->GetNext() == searchV) return currentV;
+	}
+	return NULL;
 }
 
 
